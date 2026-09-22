@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import { pool } from './db/database.js';
+import authRoutes from './routes/auth.route.js'
 
 dotenv.config();
 const app = express();
@@ -21,6 +22,8 @@ app.get('/test', async(req, res) => {
     res.json(error).status(500);
   }
 });
+
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${PORT}`);
