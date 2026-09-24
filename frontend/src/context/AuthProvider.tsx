@@ -51,11 +51,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
     persistSession(newToken, newUser);
   }
 
+  async function signup({ name, email, password }: SignupPayload): Promise<void> {
+    // Adjust this path/shape to match your actual Express route.
+    await client.post('/auth/signup', { name, email, password });
+    // Signup alone doesn't log the user in — chain into login so the
+    // behavior is explicit rather than assumed.
+    await login({ email, password });
+  }
+
   const value: AuthContextType = {
     token,
     user,
     isAuthenticated: Boolean(token),
     login,
+    signup,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

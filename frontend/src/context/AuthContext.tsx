@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { LoginPayload, User } from "./AuthProvider";
+import type { LoginPayload, SignupPayload, User } from "./AuthProvider";
 
 // 2. AuthContext Value Interface
 export interface AuthContextType {
@@ -7,6 +7,7 @@ export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (payload: LoginPayload) => Promise<void>;
+  signup: (payload: SignupPayload) => Promise<void>;
 }
 // Create Context with typed initial value (null)
 export const AuthContext = createContext<AuthContextType | null>(null);
