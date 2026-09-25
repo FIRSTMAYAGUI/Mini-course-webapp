@@ -8,13 +8,13 @@ export const findUserByEmail = async (email) => {
 };
 
 // Insert a new user into the database
-export const createUser = async (fullname, email, hashedPassword, role = 'student') => {
+export const createUser = async (name, email, password_hash, role = 'student') => {
   const query = `
-    INSERT INTO users (fullname, email, password, role)
+    INSERT INTO users (name, email, password_hash, role)
     VALUES ($1, $2, $3, $4)
-    RETURNING id, fullname, email, role, created_at;
+    RETURNING id, name, email, role, created_at;
   `;
-  const values = [fullname, email, hashedPassword, role];
+  const values = [name, email, password_hash, role];
   const result = await pool.query(query, values);
   return result.rows[0]; // Returns the newly created user object (excluding password)
 };

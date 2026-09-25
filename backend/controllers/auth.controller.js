@@ -28,7 +28,7 @@ export const login = async (req, res) => {
     }
 
     // 4. Verify password hash using bcrypt
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordValid) {
       return res.status(401).json({ 
         success: false, 
@@ -56,7 +56,7 @@ export const login = async (req, res) => {
       token,
       user: {
         id: user.id,
-        fullname: user.fullname,
+        name: user.name,
         email: user.email,
         role: user.role
       }
@@ -71,21 +71,21 @@ export const login = async (req, res) => {
   }
 };
 
-export const register = async (req, res) => {
+export const signup = async (req, res) => {
   try {
-    let { fullname, email, password, role } = req.body;
+    let { name, email, password, role } = req.body;
 
     // 1. Trim input fields
-    fullname = fullname?.trim();
+    name = name?.trim();
     email = email?.trim();
     password = password?.trim();
-    role = role?.trim().toLowerCase() || 'user'; // Default role to 'user'
+    role = role?.trim().toLowerCase() || 'student'; // Default role to 'user'
 
     // 2. Validate non-empty inputs
-    if (!fullname || !email || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Please fill in all required fields (fullname, email, password)"
+        message: "Please fill in all required fields (name, email, password)"
       });
     }
 
@@ -112,7 +112,7 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // 5. Create new user in the database
-    const newUser = await createUser(fullname, email, hashedPassword, role);
+    const newUser = await createUser(name, email, hashedPassword, role);
 
     // 6. Generate JWT token (logs user in automatically upon registration)
     const payload = {
@@ -134,7 +134,7 @@ export const register = async (req, res) => {
       token,
       user: {
         id: newUser.id,
-        fullname: newUser.fullname,
+        name: newUser.name,
         email: newUser.email,
         role: newUser.role
       }

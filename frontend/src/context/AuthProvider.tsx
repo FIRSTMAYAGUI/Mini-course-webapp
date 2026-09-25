@@ -5,7 +5,6 @@ import { AuthContext, type AuthContextType } from './AuthContext';
 // 1. User & Auth Payload Interfaces
 export interface User {
   id: string;
-  fullname?: string;
   name?: string;
   email: string;
   role: string;
