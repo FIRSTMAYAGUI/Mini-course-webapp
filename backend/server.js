@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { pool } from './db/database.js';
 import authRoutes from './routes/auth.route.js'
 import cors from 'cors'
+import { authenticateToken } from './middleware/authMiddleware.js';
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,14 @@ app.get('/test', async(req, res) => {
     console.log(error)
     res.json(error).status(500);
   }
+});
+
+app.get('/me', authenticateToken, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Protected user data retrieved successfully.',
+    user: req.user
+  });
 });
 
 app.use("/api/auth", authRoutes);
