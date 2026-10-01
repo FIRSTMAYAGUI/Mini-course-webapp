@@ -4,6 +4,7 @@ import { pool } from './db/database.js';
 import authRoutes from './routes/auth.route.js'
 import cors from 'cors'
 import { authenticateToken } from './middleware/authMiddleware.js';
+import { enrollmentCheck } from './middleware/enrollmentMiddleware.js';
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,13 @@ app.get('/me', authenticateToken, (req, res) => {
     success: true,
     message: 'Protected user data retrieved successfully.',
     user: req.user
+  });
+});
+
+app.get('/courses/:courseId', authenticateToken, enrollmentCheck, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'enrolled user data retrieved successfully.',
   });
 });
 

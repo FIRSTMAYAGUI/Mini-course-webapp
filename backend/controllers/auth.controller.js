@@ -127,6 +127,8 @@ export const signup = async (req, res) => {
       { expiresIn: '1d' }
     );
 
+    console.log(`New user registered: ${newUser.email} with role: ${newUser.role}`);
+
     // 7. Return success response
     return res.status(201).json({
       success: true,
@@ -142,6 +144,7 @@ export const signup = async (req, res) => {
 
   } catch (error) {
     console.error('Registration Error:', error.message);
+    console.log(req.body); // Log the request body for debugging
     return res.status(500).json({
       success: false,
       message: "Internal server error"
