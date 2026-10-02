@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 import { pool } from './db/database.js';
 import authRoutes from './routes/auth.route.js'
+import videoRoutes from './routes/video.route.js'
 import cors from 'cors'
 import { authenticateToken } from './middleware/authMiddleware.js';
 import { enrollmentCheck } from './middleware/enrollmentMiddleware.js';
@@ -44,6 +45,7 @@ app.get('/courses/:courseId', authenticateToken, enrollmentCheck, (req, res) => 
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/videos", videoRoutes);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${PORT}`);

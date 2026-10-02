@@ -6,6 +6,7 @@ export const enrollmentCheck = async (req, res, next) => {
 
     // Check if the user is enrolled in the course
     const enrolledUser = await findEnrolledUser(userId, courseId);
+    
     if (!enrolledUser) {
         return res.status(403).json({ error: 'User is not enrolled in this course' });
     }
