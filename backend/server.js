@@ -39,6 +39,7 @@ app.get('/courses/:courseId', authenticateToken, enrollmentCheck, (req, res) => 
   res.status(200).json({
     success: true,
     message: 'enrolled user data retrieved successfully.',
+    user: req.user
   });
 });
 

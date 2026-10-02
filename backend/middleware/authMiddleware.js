@@ -3,9 +3,8 @@ import jwt from 'jsonwebtoken';
 export const authenticateToken = (req, res, next) => {
   // 1. Read the Authorization header
   const authHeader = req.headers['authorization'];
-  
-  // Format: "Bearer <token>"
-  const token = authHeader && authHeader.split('')[1];
+
+  const token = authHeader && authHeader.split(' ')[1];
 
   // 2. Return 401 if no token is provided
   if (!token) {
