@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { convertToHLS } from '../utils/hlsConverter.js';
 import { createVideo, getNextVideoPosition } from '../models/videoModel.js';
+import { findCourseById } from '../models/courseModel.js'; // 👈 1. Import course lookup
 
 export const uploadAndConvertVideo = async (req, res) => {
   let rawFilePath = null;
@@ -9,7 +10,7 @@ export const uploadAndConvertVideo = async (req, res) => {
   try {
     const { courseId, title } = req.body;
 
-    // 1. Basic validation
+    // Validation checks
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'No video file uploaded' });
     }
@@ -17,50 +18,54 @@ export const uploadAndConvertVideo = async (req, res) => {
       return res.status(400).json({ success: false, message: 'courseId and title are required' });
     }
 
-    rawFilePath = req.file.path; // e.g., 'tmp/uploads/17123456-raw.mp4'
+    rawFilePath = req.file.path;
+
+    // 👈 2. Verify course exists BEFORE running expensive FFmpeg conversion
+    const courseExists = await findCourseById(courseId);
+    if (!courseExists) {
+      // Clean up raw file immediately
+      await fs.unlink(rawFilePath).catch(() => {});
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found. Please provide a valid courseId.',
+      });
+    }
+
     const videoFolderId = `video-${Date.now()}`;
-    
-    // Output directory in your sibling tmp/ folder or public uploads folder
     const outputDir = path.join(process.cwd(), '..', 'tmp', 'hls', videoFolderId);
 
-    // 2. Convert video to HLS (.m3u8 + .ts segments)
+    // Convert video to HLS
     await convertToHLS(rawFilePath, outputDir);
 
-    // 3. Construct storage key (relative path to master playlist)
     const storageKey = `hls/${videoFolderId}/index.m3u8`;
-
-    // 4. Calculate lesson position in the course
     const position = await getNextVideoPosition(courseId);
 
-    // 5. Insert video metadata into PostgreSQL
+    // Save metadata to PostgreSQL
     const newVideo = await createVideo({
       courseId,
       title: title.trim(),
       storageKey,
-      position
+      position,
     });
 
-    // 6. Clean up the original uploaded file from tmp/
+    // Cleanup raw video file
     await fs.unlink(rawFilePath).catch(() => {});
 
-    // 7. Return successful response
     return res.status(201).json({
       success: true,
-      message: 'Video uploaded, converted to HLS, and registered successfully',
-      data: newVideo
+      message: 'Video uploaded, converted to HLS, and attached to course successfully',
+      data: newVideo,
     });
-
   } catch (error) {
     console.error('Video Upload/HLS Error:', error.message);
 
-    // Clean up temporary file if process failed
     if (rawFilePath) {
       await fs.unlink(rawFilePath).catch(() => {});
     }
 
     return res.status(500).json({
       success: false,
-      message: 'Failed to process video upload'
+      message: 'Failed to process video upload',
     });
   }
 };
