@@ -6,17 +6,17 @@ import { createCourse, getAllCourses } from '../models/courseModel.js';
  */
 export const createCourseController = async (req, res) => {
   try {
-    let { title, description } = req.body;
+    let { title } = req.body;
 
     // 1. Trim input fields
     title = title?.trim();
-    description = description?.trim();
+    //description = description?.trim();
 
     // 2. Validate input
-    if (!title || !description) {
+    if (!title) {
       return res.status(400).json({
         success: false,
-        message: 'Course title and description are required',
+        message: 'Course title is required',
       });
     }
 
@@ -26,7 +26,6 @@ export const createCourseController = async (req, res) => {
     // 4. Create course in DB
     const newCourse = await createCourse({
       title,
-      description,
       instructorId,
     });
 

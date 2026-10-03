@@ -20,6 +20,6 @@ export const requireInstructorOrAdmin = (req, res, next) => {
   // Reject all other roles (e.g., standard 'user' or 'student')
   return res.status(403).json({
     success: false,
-    message: 'Access denied. Only instructors or admins can create courses.',
+    message: 'Access denied. Only instructors or admins are allowed to perform this action.',
   });
 };

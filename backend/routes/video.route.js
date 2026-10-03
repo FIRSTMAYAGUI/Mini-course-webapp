@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import { uploadAndConvertVideo } from '../controllers/video.controller.js';
 import { authenticateToken } from '../middleware/authMiddleware.js'; // Optional route protection
+import { requireInstructorOrAdmin } from '../middleware/roleMiddleware.js';
 
 const router = express.Router();
 
@@ -31,6 +32,6 @@ const upload = multer({
 });
 
 // POST /api/videos/upload
-router.post('/upload', authenticateToken, upload.single('video'), uploadAndConvertVideo);
+router.post('/upload', requireInstructorOrAdmin, authenticateToken, upload.single('video'), uploadAndConvertVideo);
 
 export default router;

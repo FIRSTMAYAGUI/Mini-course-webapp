@@ -19,6 +19,7 @@ export const uploadAndConvertVideo = async (req, res) => {
     }
 
     rawFilePath = req.file.path;
+    console.log(rawFilePath)
 
     // 👈 2. Verify course exists BEFORE running expensive FFmpeg conversion
     const courseExists = await findCourseById(courseId);

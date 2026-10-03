@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import Home from './pages/Home';
+import InstructorDashboardPage from './pages/InstructorDashboardPage';
 
 export default function App() {
   return (
@@ -12,11 +12,13 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
 
-          {/* Placeholder until Step 8+ builds a real dashboard */}
-          <Route path="/dashboard" element={<div style={{ padding: 40 }}>Dashboard coming soon</div>} />
+          {/* Create-course + upload-video dashboard, built for Step 9 testing.
+              No route-guarding yet (should redirect to /login if not authenticated) —
+              add that once Step 7's middleware pattern is mirrored on the frontend. */}
+          <Route path="/dashboard" element={<InstructorDashboardPage />} />
 
           {/* Default: send people to login */}
-          <Route path="/" element={<Home/>} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

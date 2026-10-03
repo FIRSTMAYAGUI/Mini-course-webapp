@@ -3,13 +3,13 @@ import { pool } from '../db/database.js'; // Adjust relative path if needed
 /**
  * Creates a new course record in the database
  */
-export const createCourse = async ({ title, description, instructorId }) => {
+export const createCourse = async ({ title, instructorId }) => {
   const query = `
-    INSERT INTO courses (title, description, instructor_id)
-    VALUES ($1, $2, $3)
-    RETURNING id, title, description, instructor_id, created_at;
+    INSERT INTO courses (title, instructor_id)
+    VALUES ($1, $2)
+    RETURNING id, title,instructor_id, created_at;
   `;
-  const values = [title, description, instructorId];
+  const values = [title, instructorId];
   const result = await pool.query(query, values);
   return result.rows[0];
 };
@@ -27,7 +27,7 @@ export const findCourseById = async (courseId) => {
  * Fetches all courses with their basic details
  */
 export const getAllCourses = async () => {
-  const query = 'SELECT id, title, description, instructor_id, created_at FROM courses ORDER BY created_at DESC;';
+  const query = 'SELECT id, title, instructor_id, created_at FROM courses ORDER BY created_at DESC;';
   const result = await pool.query(query);
   return result.rows;
 };

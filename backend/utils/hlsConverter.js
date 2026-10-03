@@ -17,7 +17,7 @@ export const convertToHLS = async (inputFilePath, outputDir) => {
       '-i', inputFilePath,           // Input file
       '-codec:v', 'libx264',         // Video codec
       '-codec:a', 'aac',            // Audio codec
-      '-hls_time', '10',             // 10-second segments
+      '-hls_time', '15',             // 15-second segments
       '-hls_playlist_type', 'vod',   // Video on Demand
       '-hls_segment_filename', segmentPattern,
       '-start_number', '0',
