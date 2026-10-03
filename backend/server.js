@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 import { pool } from './db/database.js';
 import authRoutes from './routes/auth.route.js'
+import courseRoutes from './routes/course.route.js'
 import videoRoutes from './routes/video.route.js'
 import cors from 'cors'
 import { authenticateToken } from './middleware/authMiddleware.js';
@@ -36,15 +37,16 @@ app.get('/me', authenticateToken, (req, res) => {
   });
 });
 
-app.get('/courses/:courseId', authenticateToken, enrollmentCheck, (req, res) => {
+/* app.get('/courses/:courseId', authenticateToken, enrollmentCheck, (req, res) => {
   res.status(200).json({
     success: true,
     message: 'enrolled user data retrieved successfully.',
     user: req.user
   });
-});
+}); */
 
 app.use("/api/auth", authRoutes);
+app.use("/api/courses", courseRoutes);
 app.use("/api/videos", videoRoutes);
 
 app.listen(PORT, () => {
