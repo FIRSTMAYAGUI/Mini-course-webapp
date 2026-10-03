@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthProvider';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import InstructorDashboardPage from './pages/InstructorDashboardPage';
+import CoursesListPage from './pages/CoursesListPage';
 
 export default function App() {
   return (
@@ -16,6 +17,8 @@ export default function App() {
               No route-guarding yet (should redirect to /login if not authenticated) —
               add that once Step 7's middleware pattern is mirrored on the frontend. */}
           <Route path="/dashboard" element={<InstructorDashboardPage />} />
+          {/* All courses the instructor owns */}
+          <Route path="/courses" element={<CoursesListPage />} />
 
           {/* Default: send people to login */}
           <Route path="*" element={<Navigate to="/login" replace />} />
