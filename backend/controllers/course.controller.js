@@ -1,4 +1,4 @@
-import { createCourse, getAllCourses } from '../models/courseModel.js';
+import { createCourse, findCoursesByInstructorId, getAllCourses } from '../models/courseModel.js';
 
 /**
  * POST /api/courses
@@ -59,6 +59,29 @@ export const getCoursesController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to retrieve courses',
+    });
+  }
+};
+
+/**
+ * GET /courses/mine
+ * Fetches all courses belonging to the authenticated instructor
+ */
+export const getMyInstructorCoursesController = async (req, res) => {
+  try {
+    const instructorId = req.user.userId; // From JWT payload attached by authenticateToken
+
+    const myCourses = await findCoursesByInstructorId(instructorId);
+
+    return res.status(200).json({
+      success: true,
+      data: myCourses,
+    });
+  } catch (error) {
+    console.error('Get My Courses Error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve instructor courses',
     });
   }
 };

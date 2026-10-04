@@ -1,8 +1,8 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createCourse } from '../api/course';
+import { createCourse } from '../../api/course';
 
-export default function InstructorDashboardPage() {
+export default function CreateCourse() {
   const navigate = useNavigate();
 
   const [courseTitle, setCourseTitle] = useState<string>('');
@@ -18,7 +18,7 @@ export default function InstructorDashboardPage() {
       // Course creation succeeded — hand off to the list page rather than
       // staying here. That page re-fetches from the server, so it doesn't
       // need the new course passed along manually.
-      //navigate('/courses');
+      navigate('/instructor/courses/mine');
     } catch (err) {
       setCourseError('Could not create the course. Try a different title.');
     } finally {

@@ -31,3 +31,17 @@ export const getAllCourses = async () => {
   const result = await pool.query(query);
   return result.rows;
 };
+
+/**
+ * Fetches all courses created by a specific instructor
+ */
+export const findCoursesByInstructorId = async (instructorId) => {
+  const query = `
+    SELECT id, title, instructor_id, created_at 
+    FROM courses 
+    WHERE instructor_id = $1 
+    ORDER BY created_at DESC;
+  `;
+  const result = await pool.query(query, [instructorId]);
+  return result.rows;
+};
