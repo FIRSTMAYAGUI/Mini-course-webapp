@@ -1,17 +1,24 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { uploadAndConvertVideo } from '../controllers/video.controller.js';
-import { authenticateToken } from '../middleware/authMiddleware.js'; // Optional route protection
+import { authenticateToken } from '../middleware/authMiddleware.js'; 
 import { requireInstructorOrAdmin } from '../middleware/roleMiddleware.js';
 
 const router = express.Router();
+
+// Ensure the destination folder exists before Multer attempts to save to it
+const uploadDir = path.join(process.cwd(), '..', 'tmp', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Configure temporary disk storage for raw uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Sibling tmp directory path
-    cb(null, path.join(process.cwd(), '..', 'tmp', 'uploads'));
+    cb(null, uploadDir); // 👈 3. Re-use the defined uploadDir variable here
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
@@ -32,6 +39,6 @@ const upload = multer({
 });
 
 // POST /api/videos/upload
-router.post('/upload', requireInstructorOrAdmin, authenticateToken, upload.single('video'), uploadAndConvertVideo);
+router.post('/upload', authenticateToken, requireInstructorOrAdmin, upload.single('video'), uploadAndConvertVideo);
 
 export default router;

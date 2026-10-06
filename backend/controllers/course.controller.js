@@ -72,6 +72,7 @@ export const getMyInstructorCoursesController = async (req, res) => {
     const instructorId = req.user.userId; // From JWT payload attached by authenticateToken
 
     const myCourses = await findCoursesByInstructorId(instructorId);
+    console.log("my courses:", myCourses)
 
     return res.status(200).json({
       success: true,

@@ -9,11 +9,16 @@ export default function MyCoursesList() {
 
   useEffect(() => {
     listMyCourses()
-      .then(setCourses)
+      .then((courses) => {
+        setCourses(courses);
+        // console.log('Courses loaded successfully', courses);
+        // console.log('Courses loaded successfully', courses.length);
+      })
       .catch(() => setError('Could not load your courses.'))
       .finally(() => setLoading(false));
   }, []);
-
+  // console.log('Courses', courses.length);
+  // console.log('Courses', courses);
   return (
     <div className="dashboard">
       <h1>Your courses</h1>
@@ -23,7 +28,7 @@ export default function MyCoursesList() {
         {error && <div className="form-error">{error}</div>}
 
         {!loading && !error && courses.length === 0 && (
-          <p>No courses yet. <Link to="/dashboard">Create one</Link>.</p>
+          <p>No courses yet. <Link to="/instructor/courses/create">Create one</Link>.</p>
         )}
 
         {courses.length > 0 && (
@@ -36,7 +41,7 @@ export default function MyCoursesList() {
           </ul>
         )}
 
-        <Link to="/dashboard">+ New course</Link>
+        <Link to="/instructor/courses/create">+ New course</Link>
       </div>
     </div>
   );
