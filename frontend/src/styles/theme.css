@@ -253,6 +253,25 @@ a:focus-visible {
 .course-list li:last-child {
   border-bottom: none;
 }
+
+
+/* A <Link> styled to look like a button, for navigation that isn't a form submit */
+.btn-link {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+ 
+.btn-link:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  text-decoration: none;
+}
  
 .form-success {
   background: rgba(79, 157, 255, 0.1);

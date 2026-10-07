@@ -41,7 +41,9 @@ export default function MyCoursesList() {
           </ul>
         )}
 
-        <Link to="/instructor/courses/create">+ New course</Link>
+        <Link className="btn-link" to="/instructor/courses/create">
+          + New course
+        </Link>
       </div>
     </div>
   );
