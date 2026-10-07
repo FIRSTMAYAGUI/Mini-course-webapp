@@ -28,3 +28,5 @@ Thumbs.db
 # Video storage (generated files, not source — don't commit actual video data)
 backend/storage/uploads/
 backend/storage/videos/
+tmp/hls/
+tmp/uploads/
