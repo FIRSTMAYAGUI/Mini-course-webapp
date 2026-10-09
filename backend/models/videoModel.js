@@ -26,3 +26,16 @@ export const getNextVideoPosition = async (courseId) => {
   const result = await pool.query(query, [courseId]);
   return parseInt(result.rows[0].next_position, 10);
 };
+
+/**
+ * Fetch video details by ID including course_id and storage_key
+ */
+export const findVideoById = async (videoId) => {
+  const query = `
+    SELECT id, course_id, title, storage_key, position, created_at
+    FROM videos
+    WHERE id = $1;
+  `;
+  const result = await pool.query(query, [videoId]);
+  return result.rows[0];
+};

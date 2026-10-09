@@ -2,9 +2,10 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { uploadAndConvertVideo } from '../controllers/video.controller.js';
+import { streamVideoSegment, uploadAndConvertVideo } from '../controllers/video.controller.js';
 import { authenticateToken } from '../middleware/authMiddleware.js'; 
 import { requireInstructorOrAdmin } from '../middleware/roleMiddleware.js';
+import { requireVideoAccess } from '../middleware/streamAuthMiddleware.js';
 
 const router = express.Router();
 
@@ -39,6 +40,19 @@ const upload = multer({
 });
 
 // POST /api/videos/upload
-router.post('/upload', authenticateToken, requireInstructorOrAdmin, upload.single('video'), uploadAndConvertVideo);
+router.post('/upload', 
+  authenticateToken, 
+  requireInstructorOrAdmin, 
+  upload.single('video'), 
+  uploadAndConvertVideo
+);
+
+// GET /api/videos/:id/stream/index.m3u8 & /api/videos/:id/stream/segment_000.ts
+router.get(
+  '/:id/stream/*filePath', 
+  authenticateToken, 
+  requireVideoAccess, 
+  streamVideoSegment
+);
 
 export default router;

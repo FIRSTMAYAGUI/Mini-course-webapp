@@ -45,3 +45,12 @@ export const findCoursesByInstructorId = async (instructorId) => {
   const result = await pool.query(query, [instructorId]);
   return result.rows;
 };
+
+/**
+ * Checks if a specific course belongs to an instructor
+ */
+export const isCourseOwner = async (instructorId, courseId) => {
+  const query = 'SELECT id FROM courses WHERE id = $1 AND instructor_id = $2';
+  const result = await pool.query(query, [courseId, instructorId]);
+  return result.rows.length > 0;
+};

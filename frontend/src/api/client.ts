@@ -3,7 +3,7 @@ import axios from 'axios';
 // Central place your API base URL lives. Change this one line if your
 // backend ever runs on a different port/host — nothing else should
 const client = axios.create({
-  baseURL: import.meta.env.VITE_COMPUTER_SERVER_URL,
+  baseURL: import.meta.env.VITE_MY_SERVER_URL,
 });
 
 // Attach the JWT automatically to every outgoing request, if one exists.
