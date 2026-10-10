@@ -18,6 +18,8 @@ export default function WatchPage() {
     listVideosForCourse(courseId)
       .then((data) => {
         setVideos(data);
+        console.log('Fetched videos:', data);
+        console.log('videos:', videos);
         setSelected(data[0] ?? null); // start on the first video
       })
       .catch(() => setError('Could not load videos.'))
