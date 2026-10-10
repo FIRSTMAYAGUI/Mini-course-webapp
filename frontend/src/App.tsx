@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import MyCoursesList from './pages/instructor/MyCoursesList';
 import CreateCourse from './pages/instructor/CreateCourse';
+import Home from './pages/Home';
+import WatchPage from './pages/WatchPage';
 
 export default function App() {
   return (
@@ -23,6 +25,10 @@ export default function App() {
 
           {/* Default: send people to login */}
           <Route path="*" element={<Navigate to="/login" replace />} />
+          {/* Watch a course's videos with the hls.js player */}
+          <Route path="/courses/:courseId/watch" element={<WatchPage />} />
+
+          <Route path="/" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -19,7 +19,7 @@ export default function LoginPage() {
 
     try {
       await login({ email, password });
-      navigate('/instructor/courses/mine'); // Adjust once your dashboard route exists
+      navigate('/'); // Adjust once your dashboard route exists
     } catch (err) {
       // Type-safe error handling for API responses
       if (err instanceof AxiosError && err.response?.data?.message) {

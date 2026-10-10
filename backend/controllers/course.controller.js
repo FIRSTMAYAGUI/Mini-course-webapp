@@ -1,4 +1,6 @@
-import { createCourse, findCoursesByInstructorId, getAllCourses } from '../models/courseModel.js';
+import { createCourse, findCourseById, findCoursesByInstructorId, getAllCourses } from '../models/courseModel.js';
+import { findEnrolledUser } from '../models/enrollmentModel.js';
+import { findVideosByCourseId } from '../models/videoModel.js';
 
 /**
  * POST /api/courses
@@ -83,6 +85,57 @@ export const getMyInstructorCoursesController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to retrieve instructor courses',
+    });
+  }
+};
+
+/**
+ * GET /api/courses/:id/videos
+ * Fetches all videos for a course if the user is authorized (enrolled student or course owner instructor)
+ */
+export const getCourseVideosController = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const { userId, role } = req.user;
+
+    // 1. Verify course exists
+    const course = await findCourseById(courseId);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    // 2. Enforce authorization rules
+    if (role === 'instructor') {
+      const isOwner = await isCourseOwner(userId, courseId);
+      if (!isOwner) {
+        return res.status(403).json({
+          success: false,
+          message: 'Access denied. You can only view videos for courses you created.',
+        });
+      }
+    } else {
+      // Student check
+      const isEnrolled = await findEnrolledUser(userId, courseId);
+      if (!isEnrolled) {
+        return res.status(403).json({
+          success: false,
+          message: 'Access denied. You must be enrolled in this course to view its videos.',
+        });
+      }
+    }
+
+    // 3. Fetch videos for the course
+    const videos = await findVideosByCourseId(courseId);
+
+    return res.status(200).json({
+      success: true,
+      data: videos,
+    });
+  } catch (error) {
+    console.error('Get Course Videos Error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve course videos.',
     });
   }
 };

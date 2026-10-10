@@ -39,3 +39,17 @@ export const findVideoById = async (videoId) => {
   const result = await pool.query(query, [videoId]);
   return result.rows[0];
 };
+
+/**
+ * Fetches all videos associated with a specific course
+ */
+export const findVideosByCourseId = async (courseId) => {
+  const query = `
+    SELECT id, course_id, title, storage_key, position, created_at 
+    FROM videos 
+    WHERE course_id = $1 
+    ORDER BY position ASC;
+  `;
+  const result = await pool.query(query, [courseId]);
+  return result.rows;
+};

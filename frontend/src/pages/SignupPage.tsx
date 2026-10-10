@@ -26,7 +26,7 @@ export default function SignupPage() {
     
     try {
       await signup({ name, email, password });
-      navigate('/instructor/courses/mine');
+      navigate('/');
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         setError(err.response.data.message);

@@ -1,0 +1,88 @@
+/* Watch page — relies only on variables defined in theme.css */
+
+.watch {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3) var(--space-6);
+}
+
+.watch__back {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  font-size: 0.9rem;
+}
+
+.player video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: var(--radius);
+}
+
+.watch__title {
+  font-size: 1.4rem;
+  margin: var(--space-3) 0 var(--space-5);
+}
+
+.watch__heading {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.video-card {
+  text-align: left;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.video-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.video-card--active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.video-card__thumb {
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-brand);
+}
+
+.video-card__play {
+  font-size: 1.5rem;
+  color: white;
+  opacity: 0.9;
+}
+
+.video-card__body {
+  padding: var(--space-3);
+}
+
+.video-card__body h3 {
+  font-size: 0.95rem;
+  margin-bottom: var(--space-1);
+}
+
+.video-card__body p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
